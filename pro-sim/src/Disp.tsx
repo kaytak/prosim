@@ -23,6 +23,7 @@ function Dips1() {
 
   eventBus.on("changeData", (data:any) =>{
     setCalc1(data.message)
+    if(inpRef.current) inpRef.current.value=stream[0]?.name;
   })
   const click1=()=>{
     console.log(inpRef.current?.value)
