@@ -2,7 +2,7 @@
   // A file to define the reducer function
   // reducer.ts
   import { State, initialState } from "./state";
-  import { Action, INCREMENT, DECREMENT, UPDATE_STREAM, REMOVE_TODO, INITIALIZE } from "./actions";
+  import { Action, INCREMENT, DECREMENT, UPDATE_STREAM,  INITIALIZE, ADD_BLOCK } from "./actions";
   import { dia, shapes, util, mvc, linkTools, } from "jointjs"
 import { definePaper } from "./flowsheet/model_def";
 
@@ -35,10 +35,10 @@ import { definePaper } from "./flowsheet/model_def";
             });
         //if (!state.paper.el){
           //@ts-ignore
-            action.element.current.appendChild(_paper.el);
-            definePaper(_paper,state.graph)
-            console.debug("init cancas", _paper)
-            _paper.unfreeze();
+        //    action.element.current.appendChild(_paper.el);
+        //    definePaper(_paper,state.graph)
+        //    console.debug("init cancas", _paper)
+        //    _paper.unfreeze();
             //state.setting.init++
         //} 
         return {...state,
@@ -53,7 +53,7 @@ import { definePaper } from "./flowsheet/model_def";
       case INCREMENT:
         return {
           ...state,
-          counter: state.counter + 1,
+          numBlock: state.numBlock + 1,
         };
       // Handle the decrement action
       case DECREMENT:
@@ -63,20 +63,27 @@ import { definePaper } from "./flowsheet/model_def";
         };
       // Handle the add todo action
       case UPDATE_STREAM:
+        var a=[
+          //...state.stream, action.data
+          ...state.stream.slice(0,state.currentPtr),
+          action.data,
+          ...state.stream.slice(state.currentPtr+1)
+        ]
         return {
           ...state,
           stream: [
             //...state.stream, action.data
-            ...state.stream.slice(0,state.currentPtr),
+            ...state.stream.slice(0,action.pointer),//state.currentPtr),
             action.data,
-            ...state.stream.slice(state.currentPtr+1)
+            ...state.stream.slice(action.pointer+1)//(state.currentPtr+1)
           ],
         };
       // Handle the remove todo action
-      case REMOVE_TODO:
+      case ADD_BLOCK:
+        
         return {
           ...state,
-          todos: state.todos.filter((_, i) => i !== action.payload),
+          //todos: state.todos.filter((_, i) => i !== action.payload),
         };
       // Return the default state for unknown actions
       default:

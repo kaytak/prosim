@@ -26,10 +26,11 @@ function Dips1() {
     if(inpRef.current) inpRef.current.value=stream[0]?.name;
   })
   const click1=()=>{
-    console.log(inpRef.current?.value)
-    var tmp = stream[0]
+    console.log(inpRef.current?.value,stream)
+    var tmp = JSON.parse(JSON.stringify(stream[0]))
+    if(inpRef.current?.value) tmp.name=inpRef.current?.value
    // tmp.name=val1.value();
-    dispatch(updateStream(0,stream[0]));
+    dispatch(updateStream(0,tmp));
     console.log(stream)
   }
 

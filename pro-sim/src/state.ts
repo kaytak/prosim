@@ -11,13 +11,22 @@ export interface State {
     setting:any;
     stream:Stream[];
     currentPtr:number;
+    numBlock:number;
   }
 export interface Stream{
+  order:number,
   flowrate:number,
   name:string,
   pressure_in:number,
   pressure_out:number,
   length:number
+}
+export interface Junction{
+  id:string,
+  name:string,
+  pressure_in:number,
+  pressure_out:number,
+  spec:any
 }
   // Define the initial state
   export const initialState: State = {
@@ -28,6 +37,7 @@ export interface Stream{
     graph:new dia.Graph({}, { cellNamespace: shapes }),
     setting:{init:0},
     stream:[],
-    currentPtr:0
+    currentPtr:0,
+    numBlock:0
   };
   

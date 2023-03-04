@@ -6,6 +6,7 @@
     "jointjs": "^3.6.5",
     "react-redux": "^8.0.5",
     "recoil": "^0.7.6",
-    "redux": "^4.2.1"
+    "redux": "^4.2.1",
+    "redux-thunk": "^2.4.2"
   }
 }

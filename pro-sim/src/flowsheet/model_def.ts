@@ -3,6 +3,13 @@ import { useDispatch } from "react-redux";
 import { increment } from "../actions";
 import { eventBus } from "../eventBus";
 
+interface PaperGraph{
+    paper:dia.Paper;
+    graph:dia.Graph<any>
+    blockCount:number
+}
+//@ts-ignore
+export var fsObj:PaperGraph={paper:null,graph:null,blockCount:0}
 
 export function definePaper(paper:dia.Paper,graph:dia.Graph){
     //const dispatch = useDispatch();
@@ -14,7 +21,7 @@ paper.on('link:pointerdblclick', (linkView) => {
     console.log(linkView);
 });
 paper.on('element:pointerdblclick', (f) => {
-    eventBus.dispatch("changeData", { message: "coupone applied" });
+    eventBus.dispatch("changeData", { message: "element:pointerdblclick" });
     console.log(f);
 });
 

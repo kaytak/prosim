@@ -9,8 +9,10 @@ import { createRoot } from "react-dom/client";
 import { atom, useRecoilState } from "recoil";
 import { useSelector, useDispatch } from "react-redux";
 import { State } from "./state";
-import {  initPaper } from "./actions";
+import {  initPaper, _initPaper } from "./actions";
 import 'jointjs/css/layout.css'
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
 //import './flowsheet/diagram.css'
 // Define the counter atom
 // export const counterState = atom({
@@ -73,7 +75,7 @@ function Draw1(this: any, props:any){
     const {  todos } = useSelector((state: State) => state);
 
     // Get the dispatch function from the Redux store
-    const dispatch = useDispatch();
+    const dispatch :ThunkDispatch<any, void, AnyAction>= useDispatch() ;
 
     //const start=useDraw();
 
@@ -83,7 +85,7 @@ function Draw1(this: any, props:any){
         //var namespace = shapes;
 //console.log(_canvas)
 //start(_canvas)
-dispatch(initPaper(_canvas));
+dispatch(_initPaper(_canvas));
 //console.log(paper)
 
     //     if(_canvas.current) {
