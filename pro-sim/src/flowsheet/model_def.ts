@@ -3,6 +3,9 @@ import { useDispatch } from "react-redux";
 import { increment } from "../actions";
 import { eventBus } from "../eventBus";
 
+export interface LinkView2 extends dia.LinkView{
+model:{cid:string}
+}
 interface PaperGraph{
     paper:dia.Paper;
     graph:dia.Graph<any>
@@ -14,14 +17,19 @@ export var fsObj:PaperGraph={paper:null,graph:null,blockCount:0}
 export function definePaper(paper:dia.Paper,graph:dia.Graph){
     //const dispatch = useDispatch();
     // Register events
-paper.on('link:mouseenter', (linkView) => {
+paper.on('link:mouseenter', (linkView: dia.LinkView) => {
     showLinkTools(linkView);
+});
+paper.on('link:connect', (linkView: dia.LinkView) => {
+    console.log(linkView);
 });
 paper.on('link:pointerdblclick', (linkView) => {
     console.log(linkView);
+    //@ts-ignore
+    eventBus.dispatch("changeData", { cid:linkView.model.cid, message: "link:pointerdblclick" });
 });
-paper.on('element:pointerdblclick', (f) => {
-    eventBus.dispatch("changeData", { message: "element:pointerdblclick" });
+paper.on('element:pointerdblclick', (f:any) => {
+    eventBus.dispatch("changeData", { cid:f.model.cid, message: "element:pointerdblclick" });
     console.log(f);
 });
 

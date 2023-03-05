@@ -2,7 +2,7 @@
   // A file to define the reducer function
   // reducer.ts
   import { State, initialState } from "./state";
-  import { Action, INCREMENT, DECREMENT, UPDATE_STREAM,  INITIALIZE, ADD_BLOCK } from "./actions";
+  import { Action, INCREMENT, DECREMENT, UPDATE_STREAM,  INITIALIZE, ADD_BLOCK, APPEND_STREAM } from "./actions";
   import { dia, shapes, util, mvc, linkTools, } from "jointjs"
 import { definePaper } from "./flowsheet/model_def";
 
@@ -65,20 +65,27 @@ import { definePaper } from "./flowsheet/model_def";
       case UPDATE_STREAM:
         var a=[
           //...state.stream, action.data
-          ...state.stream.slice(0,state.currentPtr),
-          action.data,
-          ...state.stream.slice(state.currentPtr+1)
+        //  ...state.blocks.slice(0,action.pointer),//state.currentPtr),
+        //  action.data,
+        //  ...state.blocks.slice(action.pointer+1)//(state.currentPtr+1)
         ]
         return {
           ...state,
-          stream: [
-            //...state.stream, action.data
-            ...state.stream.slice(0,action.pointer),//state.currentPtr),
-            action.data,
-            ...state.stream.slice(action.pointer+1)//(state.currentPtr+1)
-          ],
+          blocks: state.blocks.map(e=>{
+            if(action.cid==e.cid) return action.data
+            return e
+          }),
         };
-      // Handle the remove todo action
+
+      case APPEND_STREAM:
+        return {
+          ...state,
+          blocks:[
+            ...state.blocks.slice(0,state.blocks.length),
+            action.data
+          ]
+        }
+      // Handle the 
       case ADD_BLOCK:
         
         return {

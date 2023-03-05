@@ -9,7 +9,7 @@ export interface State {
     paper:dia.Paper|null;
     graph:dia.Graph<any>;
     setting:any;
-    stream:Stream[];
+    blocks:FlBlock[];
     currentPtr:number;
     numBlock:number;
   }
@@ -19,6 +19,13 @@ export interface Stream{
   name:string,
   pressure_in:number,
   pressure_out:number,
+  length:number
+}
+export interface FlBlock{
+  cid:string,
+  param:any,
+  name:string,
+  val:any,
   length:number
 }
 export interface Junction{
@@ -36,7 +43,7 @@ export interface Junction{
     paper:null,
     graph:new dia.Graph({}, { cellNamespace: shapes }),
     setting:{init:0},
-    stream:[],
+    blocks:[],
     currentPtr:0,
     numBlock:0
   };

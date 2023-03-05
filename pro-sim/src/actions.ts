@@ -6,7 +6,7 @@ import { dia, shapes } from "jointjs";
 import { ThunkDispatch } from "redux-thunk";
 import { model1 } from "./dia";
 import { definePaper, fsObj } from "./flowsheet/model_def";
-import { Stream } from "./state";
+import { FlBlock, Stream } from "./state";
 
   // Define the action types as constants
   export const INITIALIZE = "INITIALIZE";
@@ -14,7 +14,8 @@ import { Stream } from "./state";
   export const DECREMENT = "DECREMENT";
   export const UPDATE_STREAM = "UPDATE_STREAM";
   export const ADD_BLOCK = "REMOVE_TODO";
-  
+  export const APPEND_STREAM = "APPEND_STREAM";
+
   // Define the action interfaces
   export interface InitializeAction {
     type: typeof INITIALIZE;
@@ -31,8 +32,12 @@ import { Stream } from "./state";
   
   export interface UpdateStreamAction {
     type: typeof UPDATE_STREAM;
-    data: Stream; // The todo to be added
-    pointer:number
+    data: FlBlock; // The todo to be added
+    cid:string
+  }
+  export interface AppendStreamAction {
+    type: typeof APPEND_STREAM;
+    data: FlBlock; 
   }
   
   export interface AddBlockAction {
@@ -46,7 +51,8 @@ import { Stream } from "./state";
     | IncrementAction
     | DecrementAction
     | UpdateStreamAction
-    | AddBlockAction;
+    | AddBlockAction
+    | AppendStreamAction;
   
   // Define the action creators
   export const initPaper = (canvas: any):InitializeAction => {
@@ -58,19 +64,20 @@ import { Stream } from "./state";
 
   export const addBlock=(type:string)=>{
     return (dispatch:Function, getState:any)=>{
-      var rect1 = model1.clone();
-      fsObj.graph.addCell(rect1);
-      //console.log(rect1)
-      var new1:Stream={
-        order:fsObj.blockCount,
-        flowrate:1,
+      var rect1:any = model1.clone();
+      var r1=fsObj.graph.addCell(rect1);
+      console.log(rect1.cid,model1)
+      var new1:FlBlock={
+        cid:rect1.cid,
+       // order:fsObj.blockCount,
+        val:{flowrate:1},
         name:"unit q",
-        pressure_in:1,
-        pressure_out:1,
+        param:{pressure_in:1,
+        pressure_out:1},
         length:1
       }
       
-      dispatch(updateStream(fsObj.blockCount,new1));
+      dispatch(appendStream(new1));
       fsObj.blockCount++
     }
   }
@@ -134,14 +141,19 @@ import { Stream } from "./state";
     };
   };
   
-  export const updateStream = (ptr:number,stream: Stream): UpdateStreamAction => {
+  export const updateStream = (cid:string,block: FlBlock): UpdateStreamAction => {
     return {
       type: UPDATE_STREAM,
-      pointer:ptr,
-      data: stream,
+      cid:cid,
+      data: block,
     };
   };
-  
+  export const appendStream = (block: FlBlock): AppendStreamAction => {
+    return {
+      type: APPEND_STREAM,
+      data: block,
+    };
+  };
 /*  export const addBlock = (type: string,): AddBlockAction => {
     return {
       type: ADD_BLOCK,

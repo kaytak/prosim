@@ -11,8 +11,9 @@ import React from 'react';
 //import { eventBus } from './main';
 
 function Dips1() {
-  const [calc1, setCalc1,] = useState(0);
-  const {stream } = useSelector((state: State) => state);
+  const [currentBLockCid, setCurrentBLockCid,] = useState("none");
+  const [currentBLock, setCurrentBLock,]:any[] = useState({});
+  const {blocks } = useSelector((state: State) => state);
   const {currentPtr, } = useSelector((state: State) => state);
   const dispatch = useDispatch();
   //var val1:EventTarget;
@@ -20,28 +21,39 @@ function Dips1() {
   //var defVal=React.useRef(stream[0]?.name);
   //inpRef.current.value=stream[0]?.name;
 
-
-  eventBus.on("changeData", (data:any) =>{
-    setCalc1(data.message)
-    if(inpRef.current) inpRef.current.value=stream[0]?.name;
+  eventBus.on("changeData", (data:{cid:string, message:string}) =>{
+    //setCalc1(data)
+    //console.log(data)
+    setCurrentBLock(blocks.find(e=>e.cid==data.cid))
+    var buf=blocks.find(e=>e.cid==data.cid)?.name;
+    if(inpRef.current) {
+      if(buf!=undefined){
+        inpRef.current.value=buf;
+        setCurrentBLockCid(data.cid)
+      } 
+    }
   })
   const click1=()=>{
-    console.log(inpRef.current?.value,stream)
-    var tmp = JSON.parse(JSON.stringify(stream[0]))
+ //   console.log(inpRef.current?.value,blocks)
+    var tmp = JSON.parse(JSON.stringify(blocks.find(e=>e.cid==currentBLockCid)))
     if(inpRef.current?.value) tmp.name=inpRef.current?.value
    // tmp.name=val1.value();
-    dispatch(updateStream(0,tmp));
-    console.log(stream)
+    dispatch(updateStream(currentBLockCid,tmp));
+    //console.log(blocks)
   }
 
   return (
-    <div >
+    <div>
       Name: <input ref={inpRef} ></input>
       <button onClick={click1}>Apply</button>
-      {calc1}
+      <br/>
+      Block: {currentBLockCid}
+      <br/>
+      {JSON.stringify(currentBLock)}
     </div>
-    
+  
   )
 }
 
 export default Dips1
+

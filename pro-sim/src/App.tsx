@@ -34,16 +34,17 @@ function App() {
     //var _graph=paper.model;
     dispatch(addBlock("null"));
 
-      dispatch(increment());
+//      dispatch(increment());
     //console.log(graph)
   }
+  const run1=()=>{}
 
   return (
 
     <div className="App1">
       {data}
       <Button variant="contained" onClick={add1} >Add</Button>
-      <Button variant="contained" onClick={add1} >Add</Button>
+      <Button variant="contained" onClick={run1} >Run</Button>
       <button onClick={() => dispatch(increment())}>+</button>
     </div>
 
